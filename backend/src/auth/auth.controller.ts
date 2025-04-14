@@ -1,6 +1,7 @@
 // backend/src/auth/auth.controller.ts
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -16,9 +17,8 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(
-    @Body() body: { name: string; email: string; password: string },
-  ) {
-    return this.authService.register(body);
+  async register(@Body() data: CreateUserDto) {
+    const user = await this.authService.register(data);
+    return this.authService.login(user); // <- Isso gera e retorna o token
   }
 }

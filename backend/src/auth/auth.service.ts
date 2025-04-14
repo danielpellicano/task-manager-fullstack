@@ -46,11 +46,15 @@ export class AuthService {
   async register(data: any) {
     const userExists = await this.usersService.findByEmail(data.email);
     if (userExists) throw new UnauthorizedException('Email já cadastrado');
-
+  
     const hashedPassword = await bcrypt.hash(data.password, 10);
-    return this.usersService.create({
+    const created = await this.usersService.create({
       ...data,
       password: hashedPassword,
     });
+  
+    // Remover a senha do retorno antes de passar para login()
+    const { password, ...userWithoutPassword } = created;
+    return userWithoutPassword;
   }
 }

@@ -29,18 +29,25 @@ export default function Header() {
 
   if (!user) return null;
 
+  
+  function logout() {
+    localStorage.removeItem('token');
+    window.location.href = '/login'; // Redireciona imediatamente
+  }
+
+
   return (
     <header>
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href="/dashboard" className="flex items-center">
+          <a href="/tarefas" className="flex items-center">
             <img src="https://d3q3w18r1z0nt6.cloudfront.net/images/commons/nw-logo.png" alt="Newway" className='logo' />
           </a>
           <div className="flex items-center lg:order-2">
             <span className="text-sm text-gray-700 dark:text-gray-300 mr-4">
               {user.email} ({user.role})
             </span>
-            <a href="#" className="text-white">Logout</a>
+            <a href="#" className="text-white" onClick={logout}>Logout</a>
           </div>
          
         </div>

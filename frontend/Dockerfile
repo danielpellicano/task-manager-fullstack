@@ -1,10 +1,12 @@
-# frontend/Dockerfile
-FROM node:20-alpine
+# frontend/Dockerfile (para desenvolvimento com Next.js + Tailwind)
+FROM node:20-slim
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+
 COPY . .
-RUN npm run build
+
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+
+CMD ["npm", "run", "dev"]
