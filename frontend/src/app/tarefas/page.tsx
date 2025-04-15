@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import api from '../lib/api';
 import TaskForm from '../../components/TaskForm';
 import Header from '@/components/Header';
+import {jwtDecode} from 'jwt-decode';
 
 interface Tarefa {
   id: number;
@@ -14,10 +15,26 @@ interface Tarefa {
   done: boolean;
   createdAt: string;
   updatedAt: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  };
 }
+
+interface DecodedToken {
+  email: string;
+  sub: number;
+  role: string;
+  iat: number;
+  exp: number;
+}
+
 
 export default function TaskPage() {
   const router = useRouter();
+  const [user, setUser] = useState<DecodedToken | null>(null);
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [tarefaSelecionada, setTarefaSelecionada] = useState<Tarefa | null>(null);
   const [filtro, setFiltro] = useState<'todas' | 'pendentes' | 'concluidas'>('todas');
@@ -32,6 +49,23 @@ export default function TaskPage() {
     }
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode<DecodedToken>(token);
+      setUser(decoded);
+    } catch (err) {
+      console.error('Token inválido:', err);
+      localStorage.removeItem('token');
+      router.push('/login');
+    }
+  }, [router]);
 
   useEffect(() => {
     setLastUpdate(new Date().toLocaleTimeString());
@@ -69,7 +103,6 @@ export default function TaskPage() {
   };
 
   const handleToggleDone = async (tarefa: Tarefa) => {
-    console.log('teste');
     try {
       const updated = {
         ...tarefa,
@@ -95,8 +128,8 @@ export default function TaskPage() {
     <>
     <Header />
     <div className="py-8 px-4 mx-auto max-w-screen-xl">
-      <h1 className="text-2xl font-bold mb-4">Minhas Tarefas</h1>
 
+      {user?.role !== 'admin' && (
       <TaskForm
         tarefaEditavel={tarefaSelecionada ?? undefined}
         onSubmitSuccess={() => {
@@ -104,6 +137,7 @@ export default function TaskPage() {
           fetchTarefas();
         }}
       />
+      )}
 
 <div className="mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
         <div className="flex flex-row justify-between items-center mb-2">
@@ -182,7 +216,9 @@ export default function TaskPage() {
                   )}
                 </div>
                 <div className={`text-slate-700 ${tarefa.done ? 'line-through text-slate-500' : ''}`}>
-                  <div className="font-semibold">{tarefa.title}</div>
+                  <div className="font-semibold">{tarefa.title}  {user?.role === 'admin' && (
+    <span className="text-gray-500 text-sm ml-2">({tarefa.user.name})</span>
+  )}</div>
                   <div className="text-sm text-slate-500">{tarefa.description}</div>
                   <div className="text-xs mt-1">
                     Status:{' '}
@@ -212,7 +248,7 @@ export default function TaskPage() {
         </div>
 
         {lastUpdate && (
-          <p className="text-xs text-slate-500 text-center">Last updated {lastUpdate}</p>
+          <p className="text-xs text-slate-500 text-center">Última atualização {lastUpdate}</p>
         )}
       </div>
     </div>

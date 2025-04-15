@@ -34,7 +34,7 @@ export default function CadastroPage() {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="bg-gray-50 dark:bg-gray-900 h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 h-screen">
         <img src="https://d3q3w18r1z0nt6.cloudfront.net/images/commons/nw-logo.png" alt="Newway" className='mb-6 logo' />
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

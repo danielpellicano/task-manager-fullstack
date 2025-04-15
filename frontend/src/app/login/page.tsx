@@ -69,7 +69,7 @@ export default function LoginPage() {
                             </div>
                             <a href="#" className="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500">Esqueceu sua senha?</a>
                         </div>
-                        <button type="submit" className="btn w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 cursor-pointer">Sign in</button>
+                        <button type="submit" className="btn w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 cursor-pointer">Entrar</button>
                         <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
                             Não tem uma conta ainda? <a href="/cadastro" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Cadastre-se</a>
                         </p>

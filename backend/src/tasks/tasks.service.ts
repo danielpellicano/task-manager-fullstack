@@ -70,7 +70,6 @@ export class TasksService {
     return task;
   }
   
-  
 
   async update(id: number, data: Partial<Task>, user: User) {
     const task = await this.findOne(id, user);
@@ -82,5 +81,27 @@ export class TasksService {
     console.log(`🗑️ Requisição para deletar tarefa ID ${id} pelo usuário ID ${user.id}`);
     const task = await this.findOne(id, user);
     return this.taskRepo.remove(task);
+  }
+
+  async findAllTasksWithUsers(): Promise<Task[]> {
+    return this.taskRepo.find({
+      relations: ['user'],
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        done: true,
+        createdAt: true,
+        updatedAt: true,
+        user: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 }
